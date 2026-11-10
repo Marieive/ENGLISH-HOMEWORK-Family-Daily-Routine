@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Домашка Матвея — Family & Daily Routine</title>
+<style>
+:root{--ink:#26324a;--muted:#68758a;--green:#5a9a3a;--green-dark:#397229;--mint:#edf7e9;--cream:#fff9eb;--line:#dce7d1;--blue:#5b8fe5;--gold:#ffd661;--red:#cb6457;--shadow:0 10px 30px #29401a16}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:16px/1.5 "Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at top left,#e7f4d9,transparent 45%),linear-gradient(150deg,#fbf8ed,#eaf3e2);min-height:100vh}
+button{font:inherit}
+.wrap{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:22px 0 48px}
+.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;padding:26px 30px;color:white;border-radius:26px;background:linear-gradient(125deg,#579839,#78ad45 52%,#e3b845);box-shadow:var(--shadow)}
+.hero h1{font-size:clamp(27px,4vw,42px);line-height:1.1;margin:0 0 8px}
+.hero p{margin:0;max-width:720px;color:#f7ffef}
+.hero .mascots{font-size:clamp(44px,7vw,74px);white-space:nowrap;filter:drop-shadow(0 5px 5px #28431c44)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.86;margin-bottom:8px}
+.progress-card{margin:14px 0 18px;padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 14px #29401a0a}
+.progress-top{display:flex;justify-content:space-between;gap:10px;font-weight:750;font-size:14px;margin-bottom:7px}
+.progress-rail{height:12px;border-radius:99px;background:#edf1e9;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#70bd49,#ffce4d);border-radius:inherit;transition:width .3s}
+.progress-steps{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:5px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin:14px 0;box-shadow:var(--shadow)}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.num{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:13px;background:#e6f4db;color:var(--green-dark);font-size:18px;font-weight:900}
+.section-head h2{font-size:21px;margin:0}
+.section-head p{font-size:13px;color:var(--muted);margin:2px 0 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.tab,.small-btn,.primary-btn,.secondary-btn,.answer-btn{border:0;border-radius:11px;cursor:pointer;transition:.15s ease}
+.tab{padding:8px 13px;background:#f2f5ef;color:#52614e;font-weight:700}
+.tab.active{background:var(--green);color:#fff}
+.tab.done::after{content:" ✓";color:var(--green-dark)}
+.match-board{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col{display:grid;gap:7px;align-content:start}
+.match-title{padding:4px 8px;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.match-item{width:100%;min-height:43px;padding:8px 11px;text-align:left;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);cursor:pointer}
+.match-item:hover:not(:disabled){border-color:#9ac77b;background:#f7fcf1}
+.match-item.selected{border-color:var(--blue);background:#edf4ff;box-shadow:0 0 0 2px #5b8fe522}
+.match-item.matched{border-color:#88bf6d;background:#ecf7e6;color:#3d732e;cursor:default}
+.match-item.wrong{border-color:#e28a7f;background:#fff1ef}
+.notice{min-height:24px;margin:10px 0 0;color:var(--muted);font-size:14px;font-weight:650}
+.notice.good{color:#3e812f}.notice.bad{color:#b24c40}
+.done-note{display:none;padding:13px 15px;border-radius:12px;background:#eff9e8;color:#397229;font-weight:750}
+.done-note.show{display:block}
+.sentence-card{padding:17px;border-radius:16px;background:#f8fbf5;border:1px solid var(--line)}
+.question-count{font-size:12px;color:var(--muted);font-weight:750}
+.sentence-prompt{font-size:20px;font-weight:800;margin:5px 0 13px}
+.answer-line{display:flex;flex-wrap:wrap;gap:7px;min-height:50px;padding:9px;border:2px dashed #c8d7bc;border-radius:12px;background:white}
+.word-bank{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.word-chip{padding:7px 11px;border:1px solid #cbd9c0;border-radius:10px;background:#fff;color:var(--ink);font-weight:700;cursor:pointer}
+.word-chip:hover{border-color:var(--green);background:#f1f9e9}
+.word-chip.used{display:none}
+.sentence-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.primary-btn{padding:10px 16px;background:var(--green);color:white;font-weight:800}
+.primary-btn:hover{background:var(--green-dark)}
+.secondary-btn{padding:10px 14px;background:#eff2ec;color:#4f5d4b;font-weight:700}
+.secondary-btn:hover{background:#e4ebdd}
+.story-box{display:grid;grid-template-columns:60px 1fr;gap:12px;align-items:center;padding:14px 16px;border-radius:16px;background:linear-gradient(120deg,#fff5d9,#f4f9e9);border:1px solid #f0dc9d}
+.story-cat{font-size:48px;text-align:center}
+.story-box h3{margin:0 0 4px;font-size:17px}
+.story-box p{margin:0;color:#59624c}
+.tf-list{display:grid;gap:8px;margin-top:12px}
+.tf-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.tf-row p{margin:0;font-weight:650}
+.tf-buttons{display:flex;gap:6px}
+.answer-btn{min-width:60px;padding:7px 10px;background:#f0f4ec;color:#42513e;font-size:13px;font-weight:800}
+.answer-btn:hover:not(:disabled){background:#e2efd8}
+.answer-btn.right{background:#dff2d4;color:#397229}
+.answer-btn.wrong{background:#ffe4df;color:#a3473e}
+.tf-row.answered{background:#fafcf8}
+.dino-panel{display:flex;align-items:center;gap:12px;margin:0 0 13px;padding:11px 14px;border-radius:14px;background:#f2f8e9}
+.dino-icon{font-size:40px}
+.dino-panel p{margin:0;color:#56624e}
+.search-layout{display:grid;grid-template-columns:minmax(280px,1fr) minmax(220px,.7fr);gap:16px;align-items:start}
+.letter-grid{display:grid;grid-template-columns:repeat(16,minmax(22px,1fr));gap:3px;padding:8px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.letter{aspect-ratio:1/1;min-width:0;padding:0;border:0;border-radius:6px;background:#f6f8f2;color:#30402f;font-weight:800;cursor:pointer}
+.letter:hover{background:#e9f2e1}
+.letter.pending{background:#ffedaf;color:#74580b}
+.letter.found{background:#bfe4a8;color:#2e6425}
+.word-list{display:grid;grid-template-columns:1fr;gap:6px}
+.search-word{display:flex;justify-content:space-between;gap:8px;padding:6px 9px;border-radius:8px;background:#f6f8f2;font-size:13px}
+.search-word.found{text-decoration:line-through;background:#e9f6df;color:#4d793d}
+.search-word b{letter-spacing:.04em}
+.search-feedback{min-height:24px;margin:10px 0 0;color:var(--muted);font-size:14px;font-weight:700}
+.search-feedback.good{color:#3e812f}.search-feedback.bad{color:#b24c40}
+.finish-banner{display:none;text-align:center;padding:22px;margin-top:16px;border:2px solid #f0d47a;border-radius:19px;background:#fffdf4}
+.finish-banner.show{display:block}
+.finish-banner .trophy{font-size:48px}
+.finish-banner h2{margin:4px}
+.finish-banner p{color:var(--muted);margin:5px}
+.footer{padding:8px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:760px){
+ .wrap{width:min(100% - 18px,600px);padding-top:10px}
+ .hero{grid-template-columns:1fr auto;padding:19px 18px;gap:8px}
+ .hero p{font-size:14px}
+ .hero .mascots{font-size:42px}
+ .card{padding:14px;margin:11px 0;border-radius:17px}
+ .section-head h2{font-size:18px}
+ .search-layout{grid-template-columns:1fr}
+ .word-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .letter-grid{gap:2px;padding:5px}
+ .letter{border-radius:4px}
+}
+@media(max-width:430px){
+ .hero .mascots{display:none}
+ .match-board{gap:6px}
+ .match-item{padding:7px;font-size:13px}
+ .tf-row{grid-template-columns:1fr}
+ .tf-buttons{justify-content:flex-end}
+ .letter-grid{grid-template-columns:repeat(16,minmax(16px,1fr))}
+ .word-list{grid-template-columns:1fr 1fr}
+ .search-word{font-size:11px;padding:5px}
+ .story-box{grid-template-columns:40px 1fr;padding:11px}
+ .story-cat{font-size:36px}
+}
+.match-groups{display:grid;gap:14px}.match-group{padding:14px;border:1px solid var(--line);border-radius:15px;background:#fbfdf9}.match-group h3{margin:0 0 10px;font-size:16px;color:var(--green-dark)}</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero">
+ <div><div class="eyebrow">ENGLISH HOMEWORK</div><h1>Family & Daily Routine</h1><p>Match words, build sentences and meet Milo.</p></div>
+ <div class="mascots" aria-hidden="true">🐱</div>
+</header>
+<section class="progress-card" aria-label="Прогресс домашнего задания">
+ <div class="progress-top"><span>Твоё приключение</span><span id="progressText">0 из 3 заданий</span></div>
+ <div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+ <div class="progress-steps"><span>🔗 Match</span><span>🔤 Word order</span><span>🐱 True / False</span></div>
+</section>
+
+<section class="card" id="matchSection">
+ <div class="section-head"><span class="num">1</span><div><h2>Match (соедини) word (слово) and translation (перевод)</h2><p>Нажми на English word, затем на русский перевод.</p></div></div>
+ <div class="match-groups" id="matchGroups"></div>
+</section>
+<section class="card" id="orderSection">
+ <div class="section-head"><span class="num">2</span><div><h2>Put the words in order (расставь слова по порядку)</h2><p>Нажимай на слова по порядку. Используй can, have got, am и pm.</p></div></div>
+ <div class="sentence-card">
+  <div class="question-count" id="orderCount"></div>
+  <div class="sentence-prompt" id="orderPrompt"></div>
+  <div class="answer-line" id="answerLine" aria-label="Твоё предложение"></div>
+  <div class="word-bank" id="wordBank"></div>
+  <div class="sentence-actions"><button class="primary-btn" id="checkOrder">Проверить</button><button class="secondary-btn" id="clearOrder">Очистить</button><button class="secondary-btn" id="nextOrder" hidden>Следующее ➜</button></div>
+  <div class="notice" id="orderNotice" aria-live="polite"></div>
+ </div>
+ <div class="done-note" id="orderDone">Здорово! Все предложения собраны.</div>
+</section>
+
+<section class="card" id="trueFalseSection">
+ <div class="section-head"><span class="num">3</span><div><h2>True or False? (верно или неверно?)</h2><p>Прочитай историю про Сэма и выбери True (верно) или False (неверно).</p></div></div>
+ <div class="story-box"><div class="story-cat" aria-hidden="true">🐱</div><div><h3>Meet Milo and his friend Sam!</h3><p>Sam has got a sister, Kate. She has got long, fair hair and blue eyes. Sam gets up at 7 am and goes to school at 8 am. He can run, read and swim. He can hold his little brother's hand. At 9 pm, he goes to bed.</p></div></div>
+ <div class="tf-list" id="tfList"></div>
+ <div class="notice" id="tfNotice" aria-live="polite"></div>
+ <div class="done-note" id="tfDone">Молодец! Ты проверил все предложения.</div>
+</section>
+
+<section class="finish-banner" id="finishBanner"><div class="trophy">🏆</div><h2>Homework complete!</h2><p id="finishText">Мило гордится тобой. Отличная работа!</p></section>
+<div class="footer">Можно проходить задания в любом порядке. Попробуй ещё раз, чтобы потренироваться!</div>
+</main>
+<script>
+let score=0;
+const tasksDone={match:false,order:false,trueFalse:false};
+function updateProgress(){
+ const done=Object.values(tasksDone).filter(Boolean).length;
+ document.getElementById('progressText').textContent=done+' из 3 заданий';
+ document.getElementById('progressFill').style.width=(done/3*100)+'%';
+ if(done===3){
+  document.getElementById('finishBanner').classList.add('show');
+  document.getElementById('finishText').textContent='Ты набрал '+score+' звёздных очков. Мило гордится тобой!';
+ }
+}
+function addScore(n){score+=n;}
+const matchSets={
+ routine:[['wake up','просыпаться'],['get up','вставать'],['have breakfast','завтракать'],['brush my teeth','чистить зубы'],['get dressed','одеваться'],['go to school','идти в школу'],['lunch','обед'],['come home','приходить домой'],['go to bed','идти спать']],
+ family:[['mother','мама'],['father','папа'],['parents','родители'],['grandfather','дедушка'],['grandmother','бабушка'],['brother','брат'],['sister','сестра'],['aunt','тётя'],['uncle','дядя'],['cousin','двоюродный брат или сестра']],
+ looks:[['long hair','длинные волосы'],['fair hair','светлые волосы'],['dark hair','тёмные волосы'],['blue eyes','голубые глаза'],['a big mouth','большой рот'],['little ears','маленькие уши']]
+};
+const setLabels={routine:'Daily Routine (распорядок дня)',family:'Family (семья)',looks:'Appearance (внешность)'};
+const setDone={routine:false,family:false,looks:false};
+const matchedIds={routine:new Set(),family:new Set(),looks:new Set()};
+let selectedEnglish=null;
+function renderMatchGroups(){
+ const root=document.getElementById('matchGroups');
+ Object.keys(matchSets).forEach(key=>{
+  const group=document.createElement('div');group.className='match-group';
+  const title=document.createElement('h3');title.textContent=setLabels[key];group.appendChild(title);
+  const board=document.createElement('div');board.className='match-board';
+  const en=document.createElement('div');en.className='match-col';
+  const ru=document.createElement('div');ru.className='match-col';
+  en.innerHTML='<div class="match-title">English</div>';ru.innerHTML='<div class="match-title">Русский</div>';
+  const notice=document.createElement('div');notice.className='notice';notice.setAttribute('aria-live','polite');
+  const done=document.createElement('div');done.className='done-note';done.textContent='Отлично! Все пары в этой теме найдены.';
+  const translations=matchSets[key].map((pair,index)=>({text:pair[1],id:index})).sort(()=>Math.random()-.5);
+  matchSets[key].forEach((pair,index)=>{
+   const b=document.createElement('button');b.className='match-item';b.textContent=pair[0];b.dataset.id=index;
+   b.onclick=()=>selectEnglish(key,index,b,notice);en.appendChild(b);
+  });
+  translations.forEach(item=>{
+   const b=document.createElement('button');b.className='match-item';b.textContent=item.text;b.dataset.id=item.id;
+   b.onclick=()=>selectRussian(key,item.id,b,en,notice,done);
+   ru.appendChild(b);
+  });
+  board.append(en,ru);group.append(board,notice,done);root.appendChild(group);
+ });
+}
+function selectEnglish(key,index,button,notice){
+ if(button.disabled)return;
+ if(selectedEnglish&&selectedEnglish.button)selectedEnglish.button.classList.remove('selected');
+ selectedEnglish={key:key,index:index,button:button};
+ button.classList.add('selected');notice.textContent='Теперь выбери перевод.';notice.className='notice';
+}
+function selectRussian(key,index,button,en,notice,done){
+ if(button.disabled)return;
+ if(!selectedEnglish||selectedEnglish.key!==key){notice.textContent='Сначала выбери английское слово из этой группы.';notice.className='notice bad';return;}
+ const selected=selectedEnglish,left=selected.button;
+ if(selected.index===index){
+  left.classList.remove('selected');left.classList.add('matched');button.classList.add('matched');left.disabled=true;button.disabled=true;selectedEnglish=null;
+  matchedIds[key].add(index);addScore(2);notice.textContent='Верно! +2 очка ⭐';notice.className='notice good';
+  if(matchedIds[key].size===matchSets[key].length){
+   setDone[key]=true;notice.textContent='Все пары в теме найдены!';done.classList.add('show');
+   if(Object.values(setDone).every(Boolean)){tasksDone.match=true;updateProgress();}
+  }
+ }else{
+  left.classList.add('wrong');button.classList.add('wrong');notice.textContent='Почти! Попробуй подобрать ещё раз.';notice.className='notice bad';
+  setTimeout(()=>{left.classList.remove('wrong','selected');button.classList.remove('wrong');if(selectedEnglish&&selectedEnglish.button===left)selectedEnglish=null;},650);
+ }
+}
+renderMatchGroups();
+const orderTasks=[
+ {prompt:'Скажи: Мой брат умеет бегать.',answer:'My brother can run.',words:['My','brother','can','run.']},
+ {prompt:'Спроси: Твоя сестра умеет плавать?',answer:'Can your sister swim?',words:['Can','your','sister','swim?']},
+ {prompt:'Скажи: Дедушка умеет держать малыша.',answer:'Grandpa can hold the baby.',words:['Grandpa','can','hold','the','baby.']},
+ {prompt:'Скажи: Я умею читать книгу.',answer:'I can read a book.',words:['I','can','read','a','book.']},
+ {prompt:'Скажи: У неё длинные волосы.',answer:'She has got long hair.',words:['She','has','got','long','hair.']},
+ {prompt:'Спроси: У тебя есть брат?',answer:'Have you got a brother?',words:['Have','you','got','a','brother?']},
+ {prompt:'Скажи: Мы встаём в семь утра.',answer:'We get up at seven am.',words:['We','get','up','at','seven','am.']},
+ {prompt:'Скажи: Я иду спать в девять вечера.',answer:'I go to bed at nine pm.',words:['I','go','to','bed','at','nine','pm.']}
+];
+let orderIndex=0,placedWords=[],orderLocked=false;
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderOrder(){
+ const task=orderTasks[orderIndex],bank=document.getElementById('wordBank');
+ document.getElementById('orderCount').textContent='Предложение '+(orderIndex+1)+' из '+orderTasks.length;
+ document.getElementById('orderPrompt').textContent=task.prompt;
+ document.getElementById('answerLine').innerHTML='';bank.innerHTML='';placedWords=[];orderLocked=false;
+ let tokens=shuffle(task.words.map((word,i)=>({word:word,id:i})));
+ if(tokens.map(x=>x.id).every((x,i)=>x===i))tokens=shuffle(tokens);
+ tokens.forEach(token=>{const b=document.createElement('button');b.className='word-chip';b.textContent=token.word;b.dataset.id=token.id;b.onclick=()=>placeToken(b,token);bank.appendChild(b);});
+ document.getElementById('orderNotice').textContent='';
+ document.getElementById('orderNotice').className='notice';
+ document.getElementById('checkOrder').hidden=false;
+ document.getElementById('clearOrder').hidden=false;
+ document.getElementById('nextOrder').hidden=true;
+}
+function placeToken(button,token){
+ if(orderLocked||button.classList.contains('used'))return;
+ placedWords.push(token);button.classList.add('used');
+ const chip=document.createElement('button');chip.className='word-chip';chip.textContent=token.word;chip.dataset.id=token.id;chip.onclick=()=>{if(orderLocked)return;placedWords=placedWords.filter(x=>x.id!==token.id);document.querySelector('#wordBank [data-id="'+token.id+'"]').classList.remove('used');chip.remove();};
+ document.getElementById('answerLine').appendChild(chip);
+}
+document.getElementById('checkOrder').onclick=()=>{
+ if(orderLocked)return;
+ const result=placedWords.map(x=>x.word).join(' ');
+ const notice=document.getElementById('orderNotice');
+ if(result===orderTasks[orderIndex].answer){orderLocked=true;addScore(5);notice.textContent='Верно! Отличный порядок слов. +5 очков ⭐';notice.className='notice good';document.getElementById('nextOrder').hidden=false;document.getElementById('checkOrder').hidden=true;document.getElementById('clearOrder').hidden=true;}
+ else{notice.textContent=placedWords.length?'Проверь порядок слов и попробуй ещё раз.':'Сначала нажми на слова, чтобы собрать предложение.';notice.className='notice bad';}
+};
+document.getElementById('clearOrder').onclick=renderOrder;
+document.getElementById('nextOrder').onclick=()=>{
+ orderIndex++;
+ if(orderIndex>=orderTasks.length){tasksDone.order=true;document.getElementById('orderSection').querySelector('.sentence-card').style.display='none';document.getElementById('orderDone').classList.add('show');updateProgress();}
+ else renderOrder();
+};
+renderOrder();
+
+const tfItems=[
+ {text:'Sam has got a sister called Kate.',answer:true},
+ {text:'Kate has got short, dark hair.',answer:false},
+ {text:'Kate has got blue eyes.',answer:true},
+ {text:'Sam gets up at 7 pm.',answer:false},
+ {text:'Sam goes to school at 8 am.',answer:true},
+ {text:'Sam can swim.',answer:true},
+ {text:'Sam can hold his little brother’s hand.',answer:true},
+ {text:'Sam goes to bed at 9 am.',answer:false}
+];
+let tfAnswered=0;
+const tfList=document.getElementById('tfList');
+tfItems.forEach((item,index)=>{
+ const row=document.createElement('div');row.className='tf-row';
+ const statement=document.createElement('p');statement.textContent=(index+1)+'. '+item.text;row.appendChild(statement);
+ const controls=document.createElement('div');controls.className='tf-buttons';
+ [['True',true],['False',false]].forEach(([label,value])=>{const b=document.createElement('button');b.className='answer-btn';b.textContent=label;b.onclick=()=>{
+  if(row.classList.contains('answered'))return;
+  row.classList.add('answered');const right=value===item.answer;b.classList.add(right?'right':'wrong');
+  controls.querySelectorAll('button').forEach(x=>x.disabled=true);
+  if(right){addScore(5);document.getElementById('tfNotice').textContent='Верно! +5 очков ⭐';document.getElementById('tfNotice').className='notice good';}
+  else{controls.querySelectorAll('button').forEach(x=>{if((x.textContent==='True')===item.answer)x.classList.add('right');});document.getElementById('tfNotice').textContent='Посмотри на историю ещё раз: правильный ответ отмечен зелёным.';document.getElementById('tfNotice').className='notice bad';}
+  tfAnswered++;
+  if(tfAnswered===tfItems.length){tasksDone.trueFalse=true;document.getElementById('tfDone').classList.add('show');updateProgress();}
+ };controls.appendChild(b);});
+ row.appendChild(controls);tfList.appendChild(row);
+});
+
+updateProgress();
+</script>
+</body>
+</html>
+
+
